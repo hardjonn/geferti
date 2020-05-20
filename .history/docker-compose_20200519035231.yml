@@ -1,0 +1,11 @@
+version: "3.7"
+services:
+  golang:
+    build:
+      context: .
+      dockerfile: ./docker/golang/Dockerfile
+    container_name: geferti_colang
+    ports:
+      - 443:443
+    volumes:
+      - ./:/app

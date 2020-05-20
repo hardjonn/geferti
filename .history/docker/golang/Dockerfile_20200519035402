@@ -1,0 +1,22 @@
+ARG GOLANG_VERSION="1.14"
+FROM golang:${GOLANG_VERSION} as golang
+
+# OFICIAL VERSION
+WORKDIR /app
+COPY . .
+
+# RUN go get github.com/githubnemo/CompileDaemon
+
+# ENTRYPOINT CompileDaemon
+
+# RUN go get -d -v ./...
+# RUN go install -v ./...
+
+# WORKDIR /app
+# COPY ./ /app
+# RUN go mod download
+
+# it will keep the container alive
+CMD tail -f /dev/null
+
+EXPOSE 443
