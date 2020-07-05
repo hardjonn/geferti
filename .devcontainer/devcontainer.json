@@ -35,11 +35,11 @@
     "SirTori.indenticator",
     "sleistner.vscode-fileutils",
     "streetsidesoftware.code-spell-checker",
-    "xyz.local-history",
     "adammaras.overtype",
-    "ms-vscode.go",
+    "golang.go-nightly",
     "esbenp.prettier-vscode",
     "tabnine.tabnine-vscode",
     "visualstudioexptteam.vscodeintellicode",
+    "technosophos.vscode-make"
   ]
 }
