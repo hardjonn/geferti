@@ -1,14 +1,14 @@
 .PHONY: build
 build:
-	go build -v ./cmd/apiserver
+	go build -v ./cmd/rest-server
 
 run:
-	./apiserver
+	./rest-server
 
 start: build run
 
 test:
-	go test ./...
+	go test -v -race ./...
 
 migration.new:
 	docker-compose run --rm migrate create -ext sql -dir /migrations $(name)
