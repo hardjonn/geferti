@@ -1,12 +1,13 @@
 package rest
 
 import (
-	"geferti/pkg/config"
-	"geferti/pkg/hosting"
-	"geferti/pkg/logger"
-	"geferti/pkg/node/identifying"
-	"geferti/pkg/platform"
-	"geferti/pkg/storage/mysql"
+	"github.com/hardjonn/geferti/pkg/config"
+	"github.com/hardjonn/geferti/pkg/errs"
+	"github.com/hardjonn/geferti/pkg/hosting"
+	"github.com/hardjonn/geferti/pkg/logger"
+	"github.com/hardjonn/geferti/pkg/node/identifying"
+	"github.com/hardjonn/geferti/pkg/platform"
+	"github.com/hardjonn/geferti/pkg/storage/mysql"
 
 	"github.com/rs/zerolog"
 )
@@ -41,6 +42,9 @@ func (s *Server) Start() error {
 	hoster := hosting.NewService(host)
 
 	mID, err := hoster.GetMachineID(s.config.App.Key)
+	if err != nil {
+		return errs.E(errs.Op("rest.server.start.GetMachineID"), err)
+	}
 
 	nodeIdentifier := identifying.NewService(storage)
 	err = nodeIdentifier.IdentifyNode(mID)

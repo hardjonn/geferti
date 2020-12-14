@@ -40,6 +40,8 @@
     "esbenp.prettier-vscode",
     "tabnine.tabnine-vscode",
     "visualstudioexptteam.vscodeintellicode",
-    "technosophos.vscode-make"
+    "technosophos.vscode-make",
+    "jakebathman.mysql-syntax",
+    "golang.go"
   ]
 }

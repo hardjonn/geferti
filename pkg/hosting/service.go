@@ -1,5 +1,7 @@
 package hosting
 
+import "github.com/hardjonn/geferti/pkg/errs"
+
 // Service provides host specific operations
 type Service interface {
 	GetMachineID(string) (string, error)
@@ -24,7 +26,7 @@ func (s *service) GetMachineID(appKey string) (string, error) {
 	key, err := s.r.GetMachineID(appKey)
 
 	if err != nil {
-		return "", err
+		return "", errs.E(errs.Op("hosting.service.GetMachineID"), err)
 	}
 
 	return key, nil

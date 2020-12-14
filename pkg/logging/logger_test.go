@@ -1,11 +1,12 @@
-package logger
+package logging
 
 import (
-	"geferti/pkg/config"
 	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
+
+	"github.com/hardjonn/geferti/pkg/config"
 
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/assert"

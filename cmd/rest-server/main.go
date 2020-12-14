@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"geferti/pkg/config"
-	"geferti/pkg/http/rest"
+
+	"github.com/hardjonn/geferti/pkg/config"
+	"github.com/hardjonn/geferti/pkg/http/rest"
 )
 
 func main() {

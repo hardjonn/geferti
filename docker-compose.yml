@@ -20,15 +20,6 @@ services:
     volumes:
       - ./:/app
 
-  migrate:
-    image: migrate/migrate
-    container_name: geferti_migrate
-    depends_on:
-      - db
-    volumes:
-        - ./migrations:/migrations
-    user: 1000:1000
-
   db:
     image: mysql:latest
     container_name: geferti_mysql

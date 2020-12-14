@@ -2,12 +2,9 @@ package mysql
 
 import (
 	"database/sql"
-	"fmt"
-	"geferti/pkg/config"
-	"geferti/pkg/node/identifying"
 
-	// import it here since we do not need in the main package
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/hardjonn/geferti/pkg/errs"
+	"github.com/hardjonn/geferti/pkg/node/identifying"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -17,27 +14,9 @@ type Storage struct {
 	db *sqlx.DB
 }
 
-// NewStorage return a new MySQL storage
-func NewStorage(config *config.DB) (*Storage, error) {
-	conn := connectionString(config)
-
-	db, err := sqlx.Connect("mysql", conn)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Storage{db: db}, nil
-}
-
-func connectionString(config *config.DB) string {
-	return fmt.Sprintf(
-		"%s:%s@(%s:%d)/%s",
-		config.User,
-		config.Password,
-		config.Host,
-		config.Port,
-		config.Database,
-	)
+// New creates a new repository
+func New(db *sqlx.DB) *Storage {
+	return &Storage{db: db}
 }
 
 // GetNodeByKey searches a node by the given key.
@@ -46,8 +25,23 @@ func (s *Storage) GetNodeByKey(key string) (identifying.Node, error) {
 
 	err := s.db.Get(&n, "SELECT * FROM nodes n WHERE n.deleted_at IS NULL AND n.key = ? LIMIT 1", key)
 	if err == sql.ErrNoRows {
-		return n, identifying.ErrNotFound
+		return n, errs.E(errs.Op("storage.mysql.GetNodeByKey"), identifying.ErrNotFound, errs.StatusNotFound)
 	}
 
-	return n, err
+	return n, errs.E(errs.Op("storage.mysql.GetNodeByKey"), err, errs.StatusIO)
+}
+
+// AddNode adds a node to the storage.
+func (s *Storage) AddNode(n identifying.Node) error {
+	return nil
+}
+
+// ExecuteStatement executes an SQL statement
+func (s *Storage) ExecuteStatement() error {
+	return nil
+}
+
+// InitMigrationSchema persists the migration schema into the database.
+func (s *Storage) InitMigrationSchema() error {
+	return nil
 }

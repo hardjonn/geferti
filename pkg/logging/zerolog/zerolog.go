@@ -1,35 +1,40 @@
-package logger
+package zerolog
 
 import (
 	"fmt"
-	"geferti/pkg/config"
-	"geferti/pkg/errs"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
 
+	"github.com/hardjonn/geferti/pkg/config"
+	"github.com/hardjonn/geferti/pkg/errs"
+	"github.com/hardjonn/geferti/pkg/logging"
 	"github.com/rs/zerolog"
 )
 
-// New ...
-func New(config *config.Logger) (zerolog.Logger, error) {
-
+// New creates a new looger instance
+func New(config *config.Logger) (logging.Logger, error) {
 	level := logLevel(config.Level)
 	zerolog.SetGlobalLevel(level)
 
 	outputs, err := outputWriters(config.Output, config.Path)
 	if err != nil {
-		return zerolog.Logger{}, errs.E(errs.Op("logger.New"), err)
+		return nil, errs.E(errs.Op("logger.New"), err)
 	}
 
 	multi := zerolog.MultiLevelWriter(outputs...)
 
 	logger := zerolog.New(multi).With().Timestamp().Logger()
 
-	logger.Debug().Msg("logger initialized")
+	logger.
+		Debug().
+		Str("output", config.Output).
+		Str("path", config.Path).
+		Str("handler", config.Handler).
+		Msg("logger initialized")
 
-	return logger, nil
+	return &loggerWrapper{logger, &logging.Fields{}}, nil
 }
 
 func outputWriters(output string, path string) ([]io.Writer, error) {

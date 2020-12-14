@@ -1,6 +1,8 @@
 package platform
 
 import (
+	"github.com/hardjonn/geferti/pkg/errs"
+
 	"github.com/denisbrodbeck/machineid"
 )
 
@@ -9,7 +11,7 @@ type Host struct {
 	m func(appID string) (string, error)
 }
 
-// NewHost return a new host
+// NewHost returns a new host
 func NewHost() *Host {
 
 	m := machineid.ProtectedID
@@ -22,7 +24,7 @@ func (h *Host) GetMachineID(appKey string) (string, error) {
 	id, err := h.m(appKey)
 
 	if err != nil {
-		return "", err
+		return "", errs.E(errs.Op("platform.repository.GetMachineID"), err, errs.StatusIO)
 	}
 
 	return id, nil

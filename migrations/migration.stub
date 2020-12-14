@@ -1,0 +1,17 @@
+package migrations
+
+func init() {
+	push(&Migration{
+		Up:   mig{{.Name}}Up,
+		Down: mig{{.Name}}Down,
+		Name: "{{.DbName}}",
+	})
+}
+
+func mig{{.Name}}Up(r RepositoryInterface) error {
+	return nil
+}
+
+func mig{{.Name}}Down(r RepositoryInterface) error {
+	return nil
+}
