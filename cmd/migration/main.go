@@ -18,6 +18,7 @@ func main() {
 	// init log
 	log, err := factory.Build(appConfig.Logger)
 	logging.SetLogger(log)
+	logging.Debug("helper function usage")
 	logging.Log.Debug("hello")
 	logging.Log.WithFields(&logging.Fields{"a": "abc"}).Debug("hello world")
 	logging.Log.WithFields(&logging.Fields{"int": 10}).Info("with int fields")
