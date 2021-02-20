@@ -17,7 +17,7 @@ type LogFbInterface interface {
 	Build(*config.Logger) (logging.Logger, error)
 }
 
-// GetLogFactoryBuilder is accessors for factoryBuilderMap
+// GetLogFactoryBuilder is an accessor for factoryBuilderMap
 func GetLogFactoryBuilder(key string) LogFbInterface {
 	return logfactoryBuilderMap[key]
 }

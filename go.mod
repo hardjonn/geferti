@@ -1,6 +1,6 @@
 module github.com/hardjonn/geferti
 
-go 1.15
+go 1.16
 
 require (
 	github.com/denisbrodbeck/machineid v1.0.1

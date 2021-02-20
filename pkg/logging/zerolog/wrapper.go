@@ -1,3 +1,4 @@
+// Package zerolog is a logger specific implementation
 package zerolog
 
 import (
@@ -30,7 +31,7 @@ func (logger *loggerWrapper) Debug(args ...interface{}) {
 // Debugf logs a formatted debug level message
 func (logger *loggerWrapper) Debugf(format string, args ...interface{}) {
 	defer logger.ClearFields()
-	logger.lw.Debug().Fields(*logger.f).Msgf(format, args)
+	logger.lw.Debug().Fields(*logger.f).Msgf(format, args...)
 }
 
 // Info logs an info level message
@@ -42,7 +43,7 @@ func (logger *loggerWrapper) Info(args ...interface{}) {
 // Infof logs a formatted info level message
 func (logger *loggerWrapper) Infof(format string, args ...interface{}) {
 	defer logger.ClearFields()
-	logger.lw.Info().Fields(*logger.f).Msgf(format, args)
+	logger.lw.Info().Fields(*logger.f).Msgf(format, args...)
 }
 
 // Warn logs a warn level message
@@ -54,7 +55,7 @@ func (logger *loggerWrapper) Warn(args ...interface{}) {
 // Warnf logs a formatted warn level message
 func (logger *loggerWrapper) Warnf(format string, args ...interface{}) {
 	defer logger.ClearFields()
-	logger.lw.Warn().Fields(*logger.f).Msgf(format, args)
+	logger.lw.Warn().Fields(*logger.f).Msgf(format, args...)
 }
 
 // Error logs an error level message
@@ -66,7 +67,7 @@ func (logger *loggerWrapper) Error(args ...interface{}) {
 // Errorf logs a formatted error level message
 func (logger *loggerWrapper) Errorf(format string, args ...interface{}) {
 	defer logger.ClearFields()
-	logger.lw.Error().Fields(*logger.f).Msgf(format, args)
+	logger.lw.Error().Fields(*logger.f).Msgf(format, args...)
 }
 
 // Fatal logs a fatal level message
@@ -78,7 +79,7 @@ func (logger *loggerWrapper) Fatal(args ...interface{}) {
 // Fatalf logs a formatted fatal level message
 func (logger *loggerWrapper) Fatalf(format string, args ...interface{}) {
 	defer logger.ClearFields()
-	logger.lw.Fatal().Fields(*logger.f).Msgf(format, args)
+	logger.lw.Fatal().Fields(*logger.f).Msgf(format, args...)
 }
 
 // Trace logs a trace level message
@@ -90,7 +91,7 @@ func (logger *loggerWrapper) Trace(args ...interface{}) {
 // Tracef logs a formatted trace level message
 func (logger *loggerWrapper) Tracef(format string, args ...interface{}) {
 	defer logger.ClearFields()
-	logger.lw.Trace().Fields(*logger.f).Msgf(format, args)
+	logger.lw.Trace().Fields(*logger.f).Msgf(format, args...)
 }
 
 // Panic logs a panic level message
@@ -102,5 +103,5 @@ func (logger *loggerWrapper) Panic(args ...interface{}) {
 // Panicf logs a formatted panic level message
 func (logger *loggerWrapper) Panicf(format string, args ...interface{}) {
 	defer logger.ClearFields()
-	logger.lw.Panic().Fields(*logger.f).Msgf(format, args)
+	logger.lw.Panic().Fields(*logger.f).Msgf(format, args...)
 }

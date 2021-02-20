@@ -1,10 +1,13 @@
-package logging
+package zerolog
 
 import (
 	"io/ioutil"
 	"os"
+	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/hardjonn/geferti/pkg/logging"
 
 	"github.com/hardjonn/geferti/pkg/config"
 
@@ -101,12 +104,72 @@ func TestLogger(t *testing.T) {
 		{config.Logger{Path: "/etc/geferti/geferti.log", Level: "info", Output: "mixed"}, true},
 	}
 
+	f := Factory{}
+
 	for _, test := range loggerTests {
-		_, err := New(&test.config)
+		_, err := f.Build(&test.config)
 		if test.isError {
 			assert.Error(t, err, "should return an error")
 		} else {
 			assert.NoError(t, err, "should not return any errors")
 		}
 	}
+}
+
+func TestSetAndClearFields(t *testing.T) {
+	config := config.Logger{Path: "/tmp/geferti/geferti.log", Level: "info", Output: "file"}
+	fields := &logging.Fields{"a": "abc"}
+	cleanFields := &logging.Fields{}
+
+	logger, err := New(&config)
+	assert.NoError(t, err, "should not return any errors")
+
+	chainedLogger := logger.WithFields(fields)
+	assert.Equal(t, logger, chainedLogger)
+
+	v := reflect.ValueOf(logger).Interface().(*loggerWrapper)
+	assert.Equal(t, fields, v.f)
+
+	logger.ClearFields()
+	assert.Equal(t, cleanFields, v.f)
+}
+
+func TestLogging(t *testing.T) {
+	config := config.Logger{Path: "/tmp/geferti/geferti.log", Level: "info", Output: "file"}
+	fields := &logging.Fields{"a": "abc"}
+	cleanFields := &logging.Fields{}
+
+	logger, err := New(&config)
+	v := reflect.ValueOf(logger).Interface().(*loggerWrapper)
+	assert.NoError(t, err, "should not return any errors")
+
+	logger.WithFields(fields).Debug("clears fields after itself")
+	assert.Equal(t, cleanFields, v.f)
+	logger.WithFields(fields).Debugf("%s", "clears fields after itself")
+	assert.Equal(t, cleanFields, v.f)
+
+	logger.WithFields(fields).Info("clears fields after itself")
+	assert.Equal(t, cleanFields, v.f)
+	logger.WithFields(fields).Infof("%s", "clears fields after itself")
+	assert.Equal(t, cleanFields, v.f)
+
+	logger.WithFields(fields).Warn("clears fields after itself")
+	assert.Equal(t, cleanFields, v.f)
+	logger.WithFields(fields).Warnf("%s", "clears fields after itself")
+	assert.Equal(t, cleanFields, v.f)
+
+	logger.WithFields(fields).Error("clears fields after itself")
+	assert.Equal(t, cleanFields, v.f)
+	logger.WithFields(fields).Errorf("%s", "clears fields after itself")
+	assert.Equal(t, cleanFields, v.f)
+
+	logger.WithFields(fields).Trace("clears fields after itself")
+	assert.Equal(t, cleanFields, v.f)
+	logger.WithFields(fields).Tracef("%s", "clears fields after itself")
+	assert.Equal(t, cleanFields, v.f)
+
+	assert.Panics(t, func() {logger.WithFields(fields).Panic("clears fields after itself")}, "panics")
+	assert.Equal(t, cleanFields, v.f)
+	assert.Panics(t, func() {logger.WithFields(fields).Panicf("%s", "clears fields after itself")}, "panics")
+	assert.Equal(t, cleanFields, v.f)
 }
