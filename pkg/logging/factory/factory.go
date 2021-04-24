@@ -3,12 +3,13 @@ package factory
 
 import (
 	"github.com/hardjonn/geferti/pkg/config"
+	"github.com/hardjonn/geferti/pkg/errs"
 	"github.com/hardjonn/geferti/pkg/logging"
 	"github.com/hardjonn/geferti/pkg/logging/zerolog"
 )
 
 // map logger code to logger builder
-var logfactoryBuilderMap = map[string]LogFbInterface{
+var logFactoryBuilderMap = map[string]LogFbInterface{
 	config.ZEROLOG: &zerolog.Factory{},
 }
 
@@ -18,15 +19,24 @@ type LogFbInterface interface {
 }
 
 // GetLogFactoryBuilder is an accessor for factoryBuilderMap
-func GetLogFactoryBuilder(key string) LogFbInterface {
-	return logfactoryBuilderMap[key]
+func GetLogFactoryBuilder(key string) (LogFbInterface, error) {
+	if builder, ok := logFactoryBuilderMap[key]; ok {
+		return builder, nil
+	}
+
+	return nil, errs.E(errs.Op("logging.factory.getBuilder"), errs.StatusNotFound, "logger factory builder not found")
 }
 
 // Build creates a logger instance
 func Build(lc *config.Logger) (logging.Logger, error) {
 	handler := lc.Handler
 
-	l, err := GetLogFactoryBuilder(handler).Build(lc)
+	logFactory, err := GetLogFactoryBuilder(handler)
+	if err != nil {
+		return nil, err
+	}
+
+	l, err := logFactory.Build(lc)
 	if err != nil {
 		return l, err
 	}
